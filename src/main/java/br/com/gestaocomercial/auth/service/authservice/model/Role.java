@@ -21,43 +21,43 @@ public class Role implements GrantedAuthority {
 
 
     public Role(Integer id, String name) {
-        Id = id;
-        Name = name;
+        id = id;
+        name = name;
     }
 
 
 
     public Role(String name) {
-        this.Name = name;
+        this.name = name;
     }
 
     @Id 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer Id;
+    private Integer id;
     @Column(name = "name", nullable = false, unique = true)
-    private String Name;
+    private String name;
 
     public Integer getId() {
-        return Id;
+        return id;
     }
 
 
     public void setId(Integer id) {
-        Id = id;
+        id = id;
     }
 
     public String getName() {
-        return Name;
+        return name;
     }
 
 
     public void setName(String name) {
-        Name = name;
+        name = name;
     }
 
     @Override
     public @Nullable String getAuthority() {
-        return this.Name;
+        return this.name;
     }
 }

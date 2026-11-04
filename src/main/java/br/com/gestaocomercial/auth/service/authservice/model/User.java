@@ -25,58 +25,58 @@ public class User implements UserDetails{
     public User() {}
 
     public User(String email, String password) {
-        Email = email;
-        this.Password = password;
+        this.email = email;
+        this.password = password;
     }
 
     @Id 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long Id; 
+    private Long id;
     @Column(name = "email", nullable = false, unique = true, length = 150)
-    private String Email;
+    private String email;
     @Column(name = "password_hash", nullable = false)
-    private String Password;
+    private String password;
     @Column(name = "is_active", nullable = false)
-    private boolean IsActive = true;
+    private boolean isActive = true;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-        name = "tb_users_roles",
+        name = "tb_user_roles",
         joinColumns = @JoinColumn(name = "user_id"),
         inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> Roles = new HashSet<>();
 
     public Long getId() {
-        return Id;
+        return id;
     }
 
     public void setId(Long id) {
-        Id = id;
+        id = id;
     }
 
     public String getEmail() {
-        return Email;
+        return email;
     }
 
     public void setEmail(String email) {
-        Email = email;
+        email = email;
     }
 
     public String getPassword() {
-        return this.Password;
+        return this.password;
     }
 
     public void setPassword(String password) {
-        Password = password;
+        password = password;
     }
 
     public boolean getIsActive() {
-        return IsActive;
+        return isActive;
     }
 
     public void setIsActive(boolean isActive) {
-        IsActive = isActive;
+        this.isActive = isActive;
     }
 
     public Set<Role> getRoles() {
@@ -94,7 +94,7 @@ public class User implements UserDetails{
 
     @Override
     public String getUsername() {
-        return this.Email;
+        return this.email;
     }
 
     @Override
@@ -114,6 +114,6 @@ public class User implements UserDetails{
 
     @Override
     public boolean isEnabled() {
-        return IsActive;
+        return isActive;
     }
 }
