@@ -34,23 +34,23 @@ import br.com.gestaocomercial.auth.service.authservice.repository.IRoleRepositor
 import br.com.gestaocomercial.auth.service.authservice.repository.IUserRepository;
 import br.com.gestaocomercial.auth.service.authservice.service.JwtService;
 
-@RestController 
+@RestController
 @RequestMapping("/api/auth")
 public class AuthController {
-    
-    @Autowired 
+
+    @Autowired
     private AuthenticationManager authenticationManager;
 
-    @Autowired 
+    @Autowired
     private JwtService jwtService;
 
-    @Autowired 
+    @Autowired
     private IUserRepository iUserRepository;
 
-    @Autowired 
+    @Autowired
     private IRoleRepository iRoleRepository;
 
-    @Autowired 
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @PostMapping ("/login")
@@ -61,7 +61,7 @@ public class AuthController {
         return ResponseEntity.ok(new TokenResponseDTO(token));
     }
 
-    @PostMapping ("/register")
+    @PostMapping("/register")
     public ResponseEntity<Void> register(@RequestBody RegisterRequestDTO data) {
         if (this.iUserRepository.findByEmail(data.email()) != null) {
             return ResponseEntity.badRequest().build();
@@ -71,11 +71,12 @@ public class AuthController {
         User newUser = new User(data.email(), encryptedPassword);
 
         Set<Role> userRoles = new HashSet<>();
-        for (String roleName : data.roles()) {
-            Role role = iRoleRepository.findByName(roleName);
-
-            if (role != null) {
-                userRoles.add(role);
+        if (data.roles() != null) {
+            for (String roleName : data.roles()) {
+                Role role = iRoleRepository.findByName(roleName);
+                if (role != null) {
+                    userRoles.add(role);
+                }
             }
         }
         newUser.setRoles(userRoles);
