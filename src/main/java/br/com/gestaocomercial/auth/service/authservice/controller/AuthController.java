@@ -98,7 +98,7 @@ public class AuthController {
         if (data.email() != null && !data.email().isBlank()) {
             var existingUser = this.iUserRepository.findByEmail(data.email());
 
-            if (existingUser != null && existingUser.getUsername().equals(user.getEmail())) {
+            if (existingUser != null && !existingUser.getUsername().equals(user.getEmail())) {
                 return ResponseEntity.status(HttpStatus.CONFLICT).build();
             }
 
