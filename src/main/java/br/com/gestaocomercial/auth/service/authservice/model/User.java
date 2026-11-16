@@ -52,7 +52,7 @@ public class User implements UserDetails{
     }
 
     public void setId(Long id) {
-        id = id;
+        this.id = id;
     }
 
     public String getEmail() {
@@ -60,7 +60,7 @@ public class User implements UserDetails{
     }
 
     public void setEmail(String email) {
-        email = email;
+        this.email = email;
     }
 
     public String getPassword() {
@@ -68,7 +68,7 @@ public class User implements UserDetails{
     }
 
     public void setPassword(String password) {
-        password = password;
+        this.password = password;
     }
 
     public boolean getIsActive() {

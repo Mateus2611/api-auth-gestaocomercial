@@ -3,8 +3,10 @@ package br.com.gestaocomercial.auth.service.authservice.service;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import com.auth0.jwt.JWT;
@@ -23,14 +25,19 @@ public class JwtService {
     public String generateToken(User user) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
-            
+
+            List<String> roles = user.getAuthorities().stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .toList();
+
             return JWT.create()
-                        .withIssuer("auth-api")
-                        .withSubject(user.getEmail())
-                        .withExpiresAt(genExpirationDate())
-                        .sign(algorithm); 
-        } catch(JWTCreationException exception) {
-            throw new RuntimeException("Erro ao gerar token jwt", exception);
+                    .withIssuer("auth-api")
+                    .withSubject(user.getEmail())
+                    .withClaim("roles", roles)
+                    .withExpiresAt(genExpirationDate())
+                    .sign(algorithm);
+        } catch (JWTCreationException exception) {
+            throw new RuntimeException("Erro ao gerar token JWT", exception);
         }
     }
 

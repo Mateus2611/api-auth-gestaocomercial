@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import br.com.gestaocomercial.auth.service.authservice.model.User;
 import br.com.gestaocomercial.auth.service.authservice.repository.IUserRepository;
 import br.com.gestaocomercial.auth.service.authservice.service.JwtService;
 import jakarta.servlet.FilterChain;
@@ -32,15 +33,14 @@ public class SecurityFilter extends OncePerRequestFilter {
         var token = this.recoverToken(request);
 
         if (token != null) {
-            var login = jwtService.validateToken(token);
+            String email = jwtService.validateToken(token);
+            User user = userRepository.findByEmail(email);
 
-            if (!login.isEmpty()) {
-                UserDetails user = userRepository.findByEmail(login);
-
-                if (user != null) {
-                    var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                }
+            if (user != null && Boolean.TRUE.equals(user.getIsActive())) {
+                var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            } else {
+                SecurityContextHolder.clearContext();
             }
         }
 

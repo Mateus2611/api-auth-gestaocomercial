@@ -7,5 +7,5 @@ import br.com.gestaocomercial.auth.service.authservice.model.User;
 
 public interface IUserRepository extends JpaRepository<User, Long> {
     
-    UserDetails findByEmail(String email);
+    User findByEmail(String email);
 }
